@@ -30,7 +30,7 @@ export default function Home() {
         <div>
           <p className="kicker">§ 1.0 — The Fine Print</p>
           <h1>
-            Every denial is <span className="hl">written down</span><br />
+            Every denial can be <span className="hl">stopped</span><br />
             before it happens.
           </h1>
           <p className="lede">
