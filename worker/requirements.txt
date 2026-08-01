@@ -1,0 +1,5 @@
+celery[redis]==5.4.0
+redis==5.0.7
+openai==1.37.1
+supabase==2.6.0
+pdfplumber==0.11.3
