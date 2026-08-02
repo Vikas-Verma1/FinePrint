@@ -10,7 +10,7 @@ export default function TopBar() {
 
   useEffect(() => {
     health()
-      .then((h) => setBadge(h.openai ? { text: "LIVE · " + (h.model || "AI").toUpperCase(), cls: "badge-live" } : { text: "LIVE · NO KEY", cls: "badge-demo" }))
+      .then((h) => setBadge(h.llm || h.openai ? { text: "LIVE · " + (h.model || "AI").toUpperCase(), cls: "badge-live" } : { text: "LIVE · NO KEY", cls: "badge-demo" }))
       .catch(() => setBadge({ text: "OFFLINE", cls: "badge-demo" }));
   }, []);
 

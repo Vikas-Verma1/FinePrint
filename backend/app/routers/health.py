@@ -14,7 +14,7 @@ def health():
         redis_ok = False
     return {
         "status": "ok",
-        "openai": bool(settings.OPENAI_API_KEY),
+        "openai": bool(settings.OPENAI_API_KEY or settings.GROQ_API_KEY),
         "model": settings.OPENAI_MODEL,
         "supabase": bool(settings.SUPABASE_URL and settings.SUPABASE_SERVICE_ROLE_KEY),
         "redis": redis_ok,
