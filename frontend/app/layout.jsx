@@ -1,6 +1,7 @@
 import "./globals.css";
 import TopBar from "@/components/TopBar";
 import AuroraBackground from "@/components/AuroraBackground";
+import ChatBot from "@/components/ChatBot";
 
 export const metadata = {
   title: "FinePrint — AI Insurance Advocate",
@@ -22,6 +23,9 @@ export default function RootLayout({ children }) {
         <AuroraBackground />
         <TopBar />
         <main>{children}</main>
+
+        <div id="print-area" />
+        <ChatBot />
         <footer>FinePrint · AI-assisted analysis · not legal or medical advice — always review with a qualified professional</footer>
       </body>
     </html>

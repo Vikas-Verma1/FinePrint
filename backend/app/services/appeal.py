@@ -5,6 +5,6 @@ from app.models import normalize_appeal, AppealPacket
 log = logging.getLogger("fineprint.appeal")
 
 def build(denial_text: str) -> AppealPacket:
-    raw = llm.draft_appeal(denial_text)
-    packet = normalize_appeal(raw)
-    return packet
+    raw, model_used = llm.draft_appeal(denial_text)
+    log.info("appeal.build · used model %s", model_used)
+    return normalize_appeal(raw)
