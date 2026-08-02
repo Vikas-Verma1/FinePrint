@@ -4,7 +4,7 @@ import { useState } from "react";
 export default function StressTest({ scenarios }) {
   const [i, setI] = useState(-1);
   const s = i >= 0 ? scenarios[i] : null;
-  const col = !s ? null : s.payout >= 75 ? "#10b981" : s.payout >= 50 ? "#f59e0b" : "#ef4444";
+  const col = !s ? null : s.payout >= 75 ? "#34d399" : s.payout >= 50 ? "#fbbf24" : "#ff5470";
 
   return (
     <>
@@ -18,12 +18,12 @@ export default function StressTest({ scenarios }) {
       </div>
       <div className="sc-detail">
         {!s ? (
-          <span className="hint text-slate-500">Select a scenario above to simulate…</span>
+          <span style={{ color: "var(--muted)", fontFamily: "var(--font-mono)", fontSize: 12 }}>Select a scenario above to simulate…</span>
         ) : (
           <>
             <div className="sc-top"><span className="sc-name">{s.icon} {s.name}</span><span className="sc-when">{s.when}</span></div>
-            <div className="sc-pay" style={{ color: col }}>{s.payout}% <span style={{ fontSize: "1rem", color: "var(--text-muted)", fontWeight: 400 }}>predicted coverage</span></div>
-            <div className="sc-bar"><i style={{ background: `linear-gradient(90deg, ${col}, ${col}80)`, width: s.payout + "%" }} /></div>
+            <div className="sc-pay" style={{ color: col }}>{s.payout}% <span style={{ fontSize: "1rem", color: "var(--muted)", fontWeight: 400 }}>predicted coverage</span></div>
+            <div className="sc-bar"><i style={{ color: col, background: col, width: s.payout + "%" }} /></div>
             <div className="sc-why">{s.why}</div>
             <div className="sc-clauses">{(s.clauses || []).map((c, k) => <span key={k} className="chip">{c}</span>)}</div>
           </>

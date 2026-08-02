@@ -5,7 +5,6 @@ import { cn } from "@/lib/cn";
 export default function Reveal({ children, className }) {
   const ref = useRef(null);
   const [seen, setSeen] = useState(false);
-  
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -16,10 +15,5 @@ export default function Reveal({ children, className }) {
     io.observe(el);
     return () => io.disconnect();
   }, []);
-  
-  return (
-    <div ref={ref} className={cn("reveal", seen && "in", className)}>
-      {children}
-    </div>
-  );
+  return <div ref={ref} className={cn("reveal", seen && "in", className)}>{children}</div>;
 }

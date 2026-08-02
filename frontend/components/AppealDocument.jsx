@@ -40,7 +40,7 @@ export default function AppealDocument({ sections }) {
         <button className="btn red" onClick={print}>⬇ Download PDF</button>
         <button className="btn ghost" onClick={copy}>⧉ Copy text</button>
       </div>
-      <span className={"stamp2" + (stamp ? " on" : "")} style={{ position: "fixed", top: 140, right: 40, zIndex: 60, pointerEvents: "none" }}>APPEAL FILED ✓</span>
+      <span className={"stamp2" + (stamp ? " on" : "")} style={{ position: "fixed", top: 130, right: 40, zIndex: 60, pointerEvents: "none" }}>APPEAL FILED ✓</span>
     </>
   );
 }

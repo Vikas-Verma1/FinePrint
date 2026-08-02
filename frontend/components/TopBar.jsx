@@ -6,31 +6,26 @@ import { health } from "@/lib/api";
 
 export default function TopBar() {
   const path = usePathname();
-  const [badge, setBadge] = useState({ text: "DEMO DATA", cls: "badge-demo" });
+  const [badge, setBadge] = useState({ text: "OFFLINE", cls: "badge-demo" });
 
   useEffect(() => {
     health()
-      .then((h) => {
-        if (!h.openai) setBadge({ text: "LIVE · ADD KEY", cls: "badge-live" });
-        else setBadge({ text: "LIVE · " + (h.model || "GPT-4O-MINI").toUpperCase(), cls: "badge-live" });
-      })
-      .catch(() => setBadge({ text: "DEMO DATA", cls: "badge-demo" }));
+      .then((h) => setBadge(h.openai ? { text: "LIVE · " + (h.model || "AI").toUpperCase(), cls: "badge-live" } : { text: "LIVE · NO KEY", cls: "badge-demo" }))
+      .catch(() => setBadge({ text: "OFFLINE", cls: "badge-demo" }));
   }, []);
 
   const nav = [
     { href: "/", label: "Home" },
-    { href: "/read", label: "🛡 Read" },
-    { href: "/fight", label: "⚔ Fight" },
+    { href: "/read", label: "Read" },
+    { href: "/fight", label: "Fight" },
   ];
 
   return (
     <header className="topbar">
-      <Link href="/" className="brand">⚖ FinePrint<span>AI Insurance Advocate</span></Link>
+      <Link href="/" className="brand"><span className="mark">⚖</span>FinePrint<span>AI Insurance Advocate</span></Link>
       <nav className="topnav">
         {nav.map((n) => (
-          <Link key={n.href} href={n.href} style={path === n.href ? { color: "var(--text)", borderColor: "var(--primary)", background: "rgba(99, 102, 241, 0.2)" } : undefined}>
-            {n.label}
-          </Link>
+          <Link key={n.href} href={n.href} style={path === n.href ? { color: "var(--text)", borderColor: "var(--line-2)", background: "var(--panel)" } : undefined}>{n.label}</Link>
         ))}
       </nav>
       <span className={"badge " + badge.cls}>{badge.text}</span>

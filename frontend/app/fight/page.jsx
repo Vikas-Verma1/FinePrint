@@ -2,14 +2,12 @@
 import { useEffect, useRef, useState } from "react";
 import UploadZone from "@/components/UploadZone";
 import AppealDocument from "@/components/AppealDocument";
-import { DEMO_APPEAL, M2_LOG } from "@/lib/demo";
 import { appeal, BackendUnavailable } from "@/lib/api";
 import { typeLines } from "@/lib/terminal";
 
 export default function FightPage() {
   const [phase, setPhase] = useState("upload");
   const [sections, setSections] = useState(null);
-  const [sample, setSample] = useState(false);
   const [denialFile, setDenialFile] = useState(null);
   const [denialText, setDenialText] = useState("");
   const [elapsed, setElapsed] = useState("0:00.0");
@@ -17,7 +15,7 @@ export default function FightPage() {
   const progRef = useRef(null);
   const startRef = useRef(0);
   const [toastMsg, setToastMsg] = useState(null);
-  const showToast = (m, ok) => { setToastMsg({ m, ok }); setTimeout(() => setToastMsg(null), 3400); };
+  const showToast = (m, ok) => { setToastMsg({ m, ok }); setTimeout(() => setToastMsg(null), 5000); };
 
   useEffect(() => {
     if (phase !== "analyzing") return;
@@ -29,15 +27,12 @@ export default function FightPage() {
     return () => clearInterval(iv);
   }, [phase]);
 
-  const canRun = sample || denialFile || denialText.trim().length > 20;
+  const canRun = denialFile || denialText.trim().length > 20;
 
   async function run() {
     setPhase("analyzing");
+    await new Promise((r) => setTimeout(r, 60));
     if (progRef.current) progRef.current.style.width = "0";
-    if (sample) {
-      await typeLines(logRef.current, M2_LOG, progRef.current);
-      setSections(DEMO_APPEAL); setPhase("appeal"); return;
-    }
     const typing = typeLines(logRef.current, [
       "> Submitting denial letter to FinePrint backend…",
       "> Auditing the cited clause against the policy…",
@@ -51,15 +46,13 @@ export default function FightPage() {
       showToast("Appeal drafted ✓", true);
     } catch (e) {
       await typing;
-      if (e instanceof BackendUnavailable) showToast("Backend offline — running built-in demo.", false);
-      else showToast("Live draft failed (" + e.message + ") — showing demo.", false);
-      await typeLines(logRef.current, M2_LOG, progRef.current);
-      setSections(DEMO_APPEAL); setPhase("appeal");
+      showToast(e instanceof BackendUnavailable ? "Backend offline — is uvicorn running?" : (e.message || "Appeal failed"), false);
+      setPhase("upload");
     }
   }
 
   function reset() {
-    setPhase("upload"); setSections(null); setSample(false); setDenialFile(null); setDenialText("");
+    setPhase("upload"); setSections(null); setDenialFile(null); setDenialText("");
     if (progRef.current) progRef.current.style.width = "0";
   }
 
@@ -70,32 +63,27 @@ export default function FightPage() {
           <div className="screen-head">
             <p className="kicker">Mode 2 — ⚔ Fight the Denial</p>
             <h2>They denied the claim. The policy says otherwise.</h2>
-            <p className="sub">Upload the denial letter. The agent finds the clause they cited, checks whether they applied it correctly — insurers misapply their own clauses constantly — and drafts a complete appeal citing the policy's own language.</p>
+            <p className="sub">Upload the denial letter. The agent finds the clause they cited, checks whether they applied it correctly, and drafts a complete appeal citing the policy's own language.</p>
           </div>
           <div className="dz-grid" style={{ gridTemplateColumns: "1fr" }}>
             <UploadZone icon="✉️" title="Denial Letter" hint="The letter or EOB explaining the denied claim"
-              loaded={!!denialFile || sample} fileName={denialFile ? denialFile.name : sample ? "denial_HD-2291.pdf (sample)" : ""}
-              onFile={(f) => { setDenialFile(f); setSample(false); }}
-              onSample={() => { setSample(true); setDenialFile(null); setDenialText(""); }} />
+              loaded={!!denialFile} fileName={denialFile?.name} onFile={(f) => setDenialFile(f)} />
           </div>
-          <details className="paste glass-card p-4 mt-4">
-            <summary className="cursor-pointer text-sm font-mono text-slate-400 hover:text-white transition-colors">⚡ Paste denial letter text instead (uses the backend's key)</summary>
-            <div className="inner mt-4">
-              <div>
-                <div className="ta-label mb-2">Denial letter text</div>
-                <textarea className="w-full bg-slate-900/50 border border-slate-700 rounded-lg p-3 text-sm text-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all" 
-                  value={denialText} onChange={(e) => { setDenialText(e.target.value); setSample(false); }} placeholder="Paste the denial letter text here…" rows={6} />
-              </div>
+          <details className="paste">
+            <summary>Paste denial letter text instead</summary>
+            <div className="inner">
+              <div><div className="ta-label">Denial letter text</div>
+                <textarea className="ta" value={denialText} onChange={(e) => setDenialText(e.target.value)} placeholder="Paste the denial letter text here…" rows={6} /></div>
             </div>
           </details>
-          <div className="run-row mt-8">
+          <div className="run-row">
             <button className="btn red" disabled={!canRun} onClick={run}>⚔ Generate Appeal Packet</button>
           </div>
         </>
       )}
 
       {phase === "analyzing" && (
-        <div className="screen-head">
+        <div className="screen-head" style={{ borderBottom: "none" }}>
           <p className="kicker">Building your case</p>
           <h2>Auditing the denial against the policy…</h2>
           <div className="terminal" ref={logRef} />
@@ -107,10 +95,10 @@ export default function FightPage() {
         <>
           <div className="screen-head">
             <p className="kicker">Mode 2 — Appeal Packet</p>
-            <h2>Claim #HD-2291 · $11,842.00</h2>
+            <h2>Appeal Generated</h2>
           </div>
           <div className="appeal-meta">
-            <div className="timer"><span>{elapsed}</span><small>GENERATION TIME</small></div>
+            <div className="timer"><span>{elapsed}</span><small>Generation time</small></div>
           </div>
           <AppealDocument sections={sections} />
           <div className="actions" style={{ justifyContent: "center" }}>

@@ -2,17 +2,33 @@ const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export class BackendUnavailable extends Error {}
 
+// Turn ANY FastAPI error body into a human-readable string (kills the [object Object] toast)
+function readableDetail(detail) {
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) {
+    return detail.map((d) => (d && d.msg ? d.msg : JSON.stringify(d))).join("; ") || "Validation error";
+  }
+  if (detail && typeof detail === "object") return JSON.stringify(detail);
+  return "";
+}
+
 async function post(path, body) {
   let res;
   try {
     res = await fetch(API + path, { method: "POST", body });
   } catch (e) {
-    throw new BackendUnavailable("backend unreachable: " + e.message);
+    throw new BackendUnavailable("Cannot reach backend at " + API + " — is uvicorn running?");
   }
   if (!res.ok) {
     let msg = "HTTP " + res.status;
-    try { msg = (await res.json()).detail || msg; } catch (_) {}
-    throw new Error(msg);
+    try {
+      const j = await res.json();
+      const d = readableDetail(j.detail);
+      if (d) msg = d;
+    } catch (_) {
+      try { const t = await res.text(); if (t) msg = t; } catch (__) {}
+    }
+    throw new Error(msg);   // msg is now ALWAYS a clean string
   }
   return res.json();
 }
