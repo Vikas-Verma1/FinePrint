@@ -638,30 +638,37 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--line); padd
 }
 
 .voice-btn {
-  width: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   height: 40px;
+  padding: 0 14px;
   border-radius: 10px;
-  background: var(--panel);
-  border: 1px solid var(--line-2);
-  color: var(--muted);
-  font-size: 18px;
+  background: var(--panel-2);
+  border: 1px solid var(--cyan);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.2s;
-  display: grid;
-  place-items: center;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.25);
 }
-
+.voice-btn .voice-ico { font-size: 16px; line-height: 1; }
 .voice-btn:hover {
-  background: var(--panel-2);
-  color: var(--text);
-  border-color: var(--cyan);
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--cyan);
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.45);
 }
-
 .voice-btn.listening {
   background: var(--red);
   border-color: var(--red);
-  color: white;
+  color: #fff;
   animation: pulse-record 1.5s infinite;
+  box-shadow: 0 0 18px rgba(255, 84, 112, 0.55);
 }
 
 @keyframes pulse-record {
