@@ -721,3 +721,81 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--line); padd
   .chat-window { bottom: 100px; right: 15px; left: 15px; width: auto; max-width: none; }
   .chat-toggle { bottom: 20px; right: 20px; width: 56px; height: 56px; font-size: 24px; }
 }
+
+/* ========== GLOSSARY TOOLTIPS ========== */
+.gloss {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dashed var(--cyan);
+  color: inherit;
+  outline: none;
+  border-radius: 2px;
+}
+.gloss::after {
+  content: attr(data-def);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 9px);
+  transform: translateX(-50%) translateY(4px);
+  width: max-content;
+  max-width: min(260px, 70vw);
+  background: rgba(10, 10, 24, 0.97);
+  border: 1px solid var(--line-2);
+  border-left: 3px solid var(--cyan);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s, transform .18s;
+  white-space: normal;
+  z-index: 500;
+}
+.gloss::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 3px);
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--cyan);
+  opacity: 0;
+  transition: opacity .18s;
+  pointer-events: none;
+  z-index: 500;
+}
+.gloss:hover::after,
+.gloss:focus::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.gloss:hover::before,
+.gloss:focus::before {
+  opacity: 1;
+}
+
+
+/* ========== DRAG & DROP ========== */
+.dz.drag {
+  border-color: var(--cyan);
+  background: rgba(34, 211, 238, .08);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 22px 50px -22px rgba(34, 211, 238, .55);
+}
+.dz-or {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: .7;
+}
