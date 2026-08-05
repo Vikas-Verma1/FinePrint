@@ -799,3 +799,45 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--line); padd
   color: var(--muted);
   opacity: .7;
 }
+
+
+/* ========== LANGUAGE TOGGLE ========== */
+.lang-btn {
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  color: var(--cyan);
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.lang-btn:hover {
+  background: var(--panel-2);
+  border-color: var(--cyan);
+  color: var(--text);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.35);
+}
+
+
+/* ========== CITATIONS + POLICY VIEWER ========== */
+.cite-btn {
+  background: rgba(34, 211, 238, .12);
+  border: 1px solid rgba(34, 211, 238, .5);
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 1px 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  margin: 0 2px;
+  transition: all .2s;
+}
+.cite-btn:hover { background: rgba(34, 211, 238, .25); box-shadow: 0 0 10px rgba(34,211,238,.4); }
+.viewer-chunk { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; color: var(--muted); padding: 10px 8px; border-bottom: 1px dashed var(--line); }
+.viewer-chunk .chip { margin-right: 8px; }
+.viewer-chunk.hl { background: rgba(255, 84, 112, .14); color: var(--text); border-left: 3px solid var(--red); }
